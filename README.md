@@ -145,6 +145,17 @@ The project executes and logs four parallel retrieval pipelines over the corpus:
 $$RRF\_Score(d \in D) = \frac{1}{k_{rrf} + \text{rank}_{HNSW}(d)} + \frac{1}{k_{rrf} + \text{rank}_{BM25}(d)}$$
 
 
+### 📈 Structural Mechanics of the Configured Indexes
+
+#### 1. ANN Flat Cluster (`IndexIVFFlat`)
+* **Partitioning Logic (`nlist=64`):** The vector space is partitioned into **64 distinct Voronoi cells** using k-means clustering. This mapping collapses an $O(N)$ exhaustive search down to an optimized sub-linear routing path.
+* **Search Boundary (`nprobe=16`):** During retrieval, the engine isolates the query vector's location and restricts its search to only the **16 nearest clusters**. Modifying this single parameter via the configuration file allows engineers to dynamically navigate the precision-recall trade-off curve in production.
+
+#### 2. HNSW Graph (`IndexHNSWFlat`)
+* **Multi-Layer Routing Graph:** Constructs an advanced hierarchical structural network for non-exhaustive geometric traversal.
+* **Graph Hyperparameters:** Configured out-of-the-box with link-allocation limits (`M=32`), index build verification checkpoints (`efConstruction=64`), and a fast runtime evaluation window (`efSearch=64`) to maximize vector routing fidelity.
+* **Retrieval Depth (`top_k=10`):** The final evaluation pipeline truncates candidates exactly at the 10th neighbor to calculate localized ranking attributes like NDCG@10 and Recall@10.
+
 ---
 
 ## 📝 Metric Definitions for RAG Ingestion
@@ -200,6 +211,7 @@ Run the mathematical validation script to evaluate sorting quality, retrieve cou
 python evaluate_metrics.py
 ```
 
-### ⚙️ Search Index Configurations & Parameter Tuning
+4. Search Index Configurations & Parameter Tuning
 
 The architecture decouples configuration from execution logic. Index hyperparameters, grouping scales, and retrieval bounds are dynamically controlled via a centralized configuration file (`config.py`), allowing immediate tuning without code modifications.
+
