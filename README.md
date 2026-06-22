@@ -27,11 +27,12 @@ Our evaluation pipeline dynamically compiled 7,500 distinct document predictions
 
 | Search Approach | Total True Hits | Hit Rate | Precision@10 | Recall@10 | MRR@10 | NDCG@10 | Search Latency (ms/query) | Corpus Setup Overhead (sec) |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| ANN Flat Cluster (BGE-Base-v1.5) | 294 | 0.98 | 0.0980 | 0.8767 | 0.6963 | 0.7386 | 29.32 | 761.61 |
+| | | | | | | | | | 
 | Brute Force (BGE-Large-v1.5) | 298 | 0.99 | 0.0993 | 0.8800 | 0.7124 | 0.7499 | 86.45 | 2734.36 |
 | Brute Force (BGE-Base-v1.5) | 296 | 0.99 | 0.0987 | 0.8833 | 0.7034 | 0.7456 | 28.30 | 761.61 |
 | HNSW Graph (BGE-Base-v1.5) | 296 | 0.99 | 0.0987 | 0.8833 | 0.7036 | 0.7458 | 29.05 | 761.61 |
 | HNSW Graph (BGE-Large-v1.5) | 296 | 0.99 | 0.0987 | 0.8733 | 0.7057 | 0.7433 | 81.62 | 2734.36 |
-| ANN Flat Cluster (BGE-Base-v1.5) | 294 | 0.98 | 0.0980 | 0.8767 | 0.6963 | 0.7386 | 29.32 | 761.61 |
 | ANN Flat Cluster (BGE-Large-v1.5) | 293 | 0.98 | 0.0977 | 0.8667 | 0.7084 | 0.7437 | 82.38 | 2734.36 |
 | HNSW Graph (E5-Large-v2) | 287 | 0.96 | 0.0957 | 0.8600 | 0.6881 | 0.7284 | 76.30 | 2670.21 |
 | Brute Force (E5-Base-v2) | 286 | 0.95 | 0.0953 | 0.8600 | 0.6840 | 0.7245 | 25.79 | 701.16 |
