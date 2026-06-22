@@ -29,6 +29,22 @@ The master framework concurrently tracks **25 unique system pipelines** (1 stand
 5) Hybrid (HNSW + BM25) Search
 
 
+## 🎛️ Model Selection Strategy: Which Models and Why?
+
+The author deliberately selected 6 models representing three distinct architectural approaches to dense retrieval. This allows us to map out a clear performance curve across different model sizes, parameter counts, and fine-tuning paradigms.
+
+
+| Model Family | Model Name on HuggingFace | Dim | Parameters | Architectural Archetype |
+| :--- | :--- | :---: | :---: | :--- |
+| **Legacy Baseline** | `msmarco-distilbert-base-v4` | 768 | 66M | Cross-Domain Bi-Encoder |
+| **BGE Super-Family** | `BAAI/bge-base-en-v1.5` | 768 | 110M | Asymmetric Instruction-Tuned |
+| **BGE Super-Family** | `BAAI/bge-large-en-v1.5` | 1024 | 326M | Asymmetric Instruction-Tuned |
+| **E5 Super-Family** | `intfloat/e5-base-v2` | 768 | 110M | Prefix-Guided Contrastive Encoder |
+| **E5 Super-Family** | `intfloat/e5-large-v2` | 1024 | 326M | Prefix-Guided Contrastive Encoder |
+| **Neural Contrastive** | `facebook/contriever-msmarco` | 768 | 110M | Unsupervised/Continuous Pre-trained |
+
+
+
 ## 📊 Evaluation Results Summary
 
 Our evaluation pipeline dynamically compiled 7,500 distinct document predictions across all 300 queries, comparing 25 unique system tracks.
