@@ -40,12 +40,13 @@ The master framework concurrently tracks **25 unique system pipelines** (1 stand
 
 The project executes and logs four parallel retrieval pipelines over the corpus:
 
+```text
                   ┌──► BM25 Lexical Only (Raw Term Frequency Inverse Document Frequency Baseline)
                   ├──► Brute Force (PyTorch Matrix Multiplication with L2 Normalization)
                   ├──► ANN Flat Cluster (FAISS IndexIVFFlat Quantizer; nlist=64, nprobe=16)
 [User Query] ─────┼──► HNSW Graph (FAISS IndexHNSWFlat Hierarchical Network Graph)
                   └──► Hybrid Track ──► [HNSW + BM25Okapi] ──► Reciprocal Rank Fusion (RRF)
-
+```
 
 1. **BM25 Lexical Only:** Evaluates exact term frequencies matching using the `BM25Okapi` sparse tokens matrix on CPU.
 2. **Brute Force (Exact Cosine):** Runs exact matrix tensor multiplications utilizing native `torch.mm` across Normalized Document Vectors on GPU/CPU. Serves as our control baseline.
