@@ -13,7 +13,7 @@ Corpus: 5,183 scientific abstracts (PubMed)
 Queries: 300 expert-written claims
 
 
-Why this matters for RAG: Specialized medical jargon breaks weak semantic spaces. If a retriever cannot surface relevant documents within the top results, the downstream LLM lacks the context to generate accurate answers. We measure 5 distinct search tracks at @10 to find the exact point where retrieval quality meets hardware efficiency.
+Why this matters for RAG: Specialized medical jargon breaks weak semantic spaces. If a retriever cannot surface relevant documents within the top results, the downstream LLM lacks the context to generate accurate answers. The Author measure 5 distinct search tracks at @10 to find the exact point where retrieval quality meets hardware efficiency.
 
 ---
 
@@ -97,23 +97,25 @@ The project executes and logs four parallel retrieval pipelines over the corpus:
 ```text
                   ┌──► BM25 Lexical Only (Raw Term Frequency Inverse Document Frequency Baseline)
                   ├──► Brute Force (PyTorch Matrix Multiplication with L2 Normalization)
-                  ├──► ANN Flat Cluster (FAISS Index IVFFlat Quantizer; nlist=64, nprobe=16)
+                  ├──► ANN Flat Cluster (FAISS Index IVF Flat Quantizer; nlist=64, nprobe=16)
 [User Query] ─────┼──► HNSW Graph (FAISS Index HNSW Flat Hierarchical Network Graph)
                   └──► Hybrid Track ──► [HNSW + BM25Okapi] ──► Reciprocal Rank Fusion (RRF)
 ```
 
 1. **BM25 Lexical Only:** Evaluates exact term frequencies matching using the `BM25Okapi` sparse tokens matrix on CPU.
 2. **Brute Force (Exact Cosine):** Runs exact matrix tensor multiplications utilizing native `torch.mm` across Normalized Document Vectors on GPU/CPU. Serves as our control baseline.
-3. **ANN Flat Cluster (`IndexIVFFlat`):** Partitioning index that groups the normalized vector space into 64 distinct Voronoi cells. It accelerates lookups by restricting the search path to the nearest 16 clusters (`nprobe=16`).
-4. **HNSW Graph (`IndexHNSWFlat`):** Constructs a multi-layer hierarchical network graph (`M=32`, `efSearch=64`, `efConstruction=64`) for accelerated vector routing, yielding optimal approximate nearest neighbors.
+3. **ANN Flat Cluster (`Index IVF Flat`):** Partitioning index that groups the normalized vector space into 64 distinct Voronoi cells. It accelerates lookups by restricting the search path to the nearest 16 clusters (`nprobe=16`).
+4. **HNSW Graph (`Index HNSW Flat`):** Constructs a multi-layer hierarchical network graph (`M=32`, `efSearch=64`, `efConstruction=64`) for accelerated vector routing, yielding optimal approximate nearest neighbors.
 5. **Hybrid (HNSW + BM25):** Executes a concurrent lexical-semantic pipeline. Exact keyword matching from `BM25Okapi` is mathematically merged with structural graphs from HNSW using **Reciprocal Rank Fusion (RRF)**:
-   $$RRF\_Score(d \in D) = \frac{1}{k_{rrf} + \text{rank}_{HNSW}(d)} + \frac{1}{k_{rrf} + \text{rank}_{BM25}(d)}$$
+   
+$$RRF\_Score(d \in D) = \frac{1}{k_{rrf} + \text{rank}_{HNSW}(d)} + \frac{1}{k_{rrf} + \text{rank}_{BM25}(d)}$$
+
 
 ---
 
 ## 📝 Metric Definitions for RAG Ingestion
 
-We truncate all metrics strictly to the Top 10 results (`@10`) because it matches the token limits, API budgets, and practical context constraints of modern LLM prompt engineering.
+The Author truncate all metrics strictly to the Top 10 results (`@10`) because it matches the token limits, API budgets, and practical context constraints of modern LLM prompt engineering.
 
 * **Recall@10 (Quantity Metric):** Measures if the ground-truth document was successfully caught anywhere inside the Top 10 window. Critical for preventing **LLM Hallucinations**.
 * **Precision@10 (Signal-to-Noise Metric):** Measures the proportion of helpful vs. junk documents entering the prompt. High precision keeps prompts clean and limits token billing.
