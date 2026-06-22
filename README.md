@@ -29,7 +29,7 @@ The master framework concurrently tracks **25 unique system pipelines** (1 stand
 5) Hybrid (HNSW + BM25) Search
 
 
-## 🎛️ Model Selection Strategy:
+## 🎛️ Model Selection Strategy
 
 The author deliberately selected 6 models representing three distinct architectural approaches to dense retrieval. This allows us to map out a clear performance curve across different model sizes, parameter counts, and fine-tuning paradigms.
 
@@ -131,8 +131,8 @@ The project executes and logs four parallel retrieval pipelines over the corpus:
 ```text
                   ┌──► BM25 Lexical Only (Raw Term Frequency Inverse Document Frequency Baseline)
                   ├──► Brute Force (PyTorch Matrix Multiplication with L2 Normalization)
-                  ├──► ANN Flat Cluster (FAISS Index IVF Flat Quantizer; nlist=64, nprobe=16)
-[User Query] ─────┼──► HNSW Graph (FAISS Index HNSW Flat Hierarchical Network Graph)
+[User Query] ─────┼──► ANN Flat Cluster (FAISS Index IVF Flat Quantizer; nlist=64, nprobe=16)
+                  ├──► HNSW Graph (FAISS Index HNSW Flat Hierarchical Network Graph)
                   └──► Hybrid Track ──► [HNSW + BM25Okapi] ──► Reciprocal Rank Fusion (RRF)
 ```
 
@@ -199,3 +199,7 @@ Run the mathematical validation script to evaluate sorting quality, retrieve cou
 ```
 python evaluate_metrics.py
 ```
+
+### ⚙️ Search Index Configurations & Parameter Tuning
+
+The architecture decouples configuration from execution logic. Index hyperparameters, grouping scales, and retrieval bounds are dynamically controlled via a centralized configuration file (`config.py`), allowing immediate tuning without code modifications.
