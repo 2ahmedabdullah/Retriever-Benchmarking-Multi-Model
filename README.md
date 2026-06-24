@@ -188,7 +188,7 @@ The Author truncate all metrics strictly to the Top 10 results (`@10`) because i
 
 🚀 Execution Guide
 1. Installation
-Set up your local virtual environment and install the verified packages:
+Set up the local virtual environment and install the verified packages:
 
 
 ```
@@ -198,7 +198,7 @@ pip install pandas numpy rank-bm25 faiss-cpu torch beir openpyxl tqdm
 ```
 
 2. Step 1: Run the Retrieval Matrix
-Execute the main application to load the corpus, build your vector spaces, execute the 4-track searches, and write predictions to an Excel spreadsheet:
+Execute the main application to load the corpus, build the vector spaces, execute the 4-track searches, and write predictions to an Excel spreadsheet:
 
 ```
 python app.py
